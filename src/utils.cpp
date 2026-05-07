@@ -31,20 +31,35 @@ http::response<http::string_body> handle_request(const http::request<http::strin
   if (req.method() == http::verb::get) {
 	if (req.target() == "/") {
 
- 	 std::string body = read_file("../static/index.html");
+ 	 	std::string body = read_file("../static/index.html");
 
-  	if (body.empty()) {
-   	 res.result(http::status::internal_server_error);
-   	 res.body() = "Failed to load index.html";
-  	} else {
+	  	if (body.empty()) {
+   		 res.result(http::status::internal_server_error);
+   		 res.body() = "Failed to load index.html";
+  		}
+		else {
    		 res.result(http::status::ok);
    		 res.body() = body;
- 	 }
-  }
- else {
-      res.result(http::status::not_found);
-      res.body() = "<h1 style=\"text-align: center;\">404 Not Found</h1>";
-    }
+		}
+	}
+	else if (req.target() == "/elghazaly") {
+
+	 	 std::string body = read_file("../static/elghazaly.html");
+
+ 		 if (body.empty()) {
+   		 res.result(http::status::not_found);
+		 res.body() = "Bio page not found";
+ 	 	 }
+		 else {
+   		 res.result(http::status::ok);
+   		 res.body() = body;
+  		}
+	}
+
+ 	else {
+		res.result(http::status::not_found);
+	      	res.body() = "<h1 style=\"text-align: center;\">404 Not Found</h1>";
+   	 }
   }
  else {
     res.result(http::status::method_not_allowed);
